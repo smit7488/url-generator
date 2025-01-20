@@ -1,4 +1,4 @@
-what// JavaScript Document
+// JavaScript Document
 
 // Last modified 1/20/25 by Trevor Smith
 
