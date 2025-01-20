@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1" />
+<title>URLs</title>
+<link href="http://fonts.googleapis.com/css?family=Poppins:400,300,600" rel="stylesheet" type="text/css">
+<link href="assets/css/styles.css" rel="stylesheet" type="text/css">
+<script type="text/javascript" src="https://code.jquery.com/jquery-latest.min.js"></script> 
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/docx"></script>
+</head>
+<body>
+<div class="body-wrapper">
+   <div class="form">
+      <div class="form-container">
+         <form name="URLform" oninput="generateTaggedURLs()">
+            <div class="form-container-2">
+               <div class="left-flex">
+                  <div class="logo-wrap-2"> <img align="center" src="https://www.henryschein.com/us-en/images/logos/vendor/henryschein-logo.svg" alt="Henry Schein"/> </div>
+                  <h1 style="text-align: center; margin-bottom: .5em; line-height: 1.25em; font-size: calc(1em + 1.25vw)" class="h1-top">GA-Tagged URL Generator</h1>
+                  <div class="helper-text" style="text-align: center; margin-bottom: 1.5em"><em>* denotes a required field. URLs will auto-generate once all required fields have input!</em></div>
+                  
+                  <!-- Custom ID for label -->
+                  <label id="labelPageURL">*Page Url:</label>
+                  <input class="input-field" type="text" name="PageLocation" autocomplete="off" id="PageURL" />
+                  <br>
+                  <div class="helper-text"><em>Paste the full URL ending in .aspx, for example: <strong style="word-break: break-all">https://www.henryschein.com/us-en/shopping/products.aspx</strong></em></div>
+                  <div id="itemCodeList">
+                     <input class="input-field" type="hidden" name="itemsPrecursor" autocomplete="off" id="inputItemsPrecursor" readonly="readonly" />
+                     
+                     <!-- Custom ID for label -->
+                     <label id="labelItems">Item Codes:</label>
+                     <input class="input-field" type="text" name="items" autocomplete="off" id="inputItems" />
+                     <br>
+                     <div class="helper-text"><em>Enter list of item codes separated by comma (i.e. <strong>5702440,1126402,1126403</strong>)</em></div>
+                  </div>
+                  <div class="flex-wrapper">
+                     <div class="flex-column quarter" id="promoCodeList">
+                        <input class="input-field" type="hidden" name="promosPrecursor" autocomplete="off" id="inputPromoPrecursor" readonly="readonly" />
+                        
+                        <!-- Custom ID for label -->
+                        <label id="labelPromo">Promo Code:</label>
+                        <input class="input-field" type="text" name="promos" autocomplete="off" id="inputPromo" />
+                        <br>
+                        <div class="helper-text"><em>Enter one promo code</em></div>
+                     </div>
+                     <div class="flex-column quarter"> 
+                        <!-- Custom ID for label -->
+                        <label id="labelDate">*Date:</label>
+                        <input class="input-field" type="date" name="date" autocomplete="off" id="inputDate" />
+                        <br>
+                        <div class="helper-text"><em>Select the live date</em></div>
+                     </div>
+                     <div class="flex-column quarter"> 
+                        <!-- Custom ID for label -->
+                        <label id="labelProject">*Project Name:</label>
+                        <input class="input-field" type="text" name="project" autocomplete="off" id="inputProject" />
+                     </div>
+                     <div class="flex-column quarter"> 
+                        <!-- Custom ID for label -->
+                        <label id="labelJobNumber">*Job Number:</label>
+                        <input class="input-field" type="text" name="jobnumber" autocomplete="off" id="inputJobNumber" />
+                        <div class="helper-text"><em>Ex: 24DS2828</em></div>
+                     </div>
+                  </div>
+                  <div class="flex-wrapper flex-2">
+                     <div class="flex-column" style="display: none!important"> 
+                        <!-- Custom ID for label -->
+                        <label id="labelKeyword">Keyword:</label>
+                        <input class="input-field" type="text" name="keyword" autocomplete="off" id="inputKeyword" />
+                        <br>
+                        <div class="helper-text"><em>This should denote the link name, type of ad, or supplier name.</em></div>
+                     </div>
+                     <div class="flex-column third"> 
+                        <!-- Custom ID for label -->
+                        <label id="labelDivision">*Division:</label>
+                        <select name="cdivid" class="input-field" id="inputDivision">
+                           <option value="dental">Dental</option>
+                           <option value="medical">Medical</option>
+                           <option value="insource">Insource</option>
+                           <option value="international">International</option>
+                           <option value="specialmarkets">Special Markets</option>
+                           <option value="zahn">Zahn</option>
+                           <option value="340b">340b</option>
+                           <option value="corporate">Corporate</option>
+                        </select>
+                     </div>
+                     <div class="flex-column third"> 
+                        <!-- Custom ID for label -->
+                        <label id="labelPricing">*Show Pricing?</label>
+                        <select name="pricing" class="input-field" id="inputPricing">
+                           <option value="dp=true">Yes</option>
+                           <option value="dp=false" selected>No</option>
+                        </select>
+                     </div>
+                     <div class="flex-column third"> 
+                        <!-- Custom ID for label -->
+                        <label id="labelVanityURL">Vanity URL:</label>
+                        <input class="input-field" type="text" name="vanity" autocomplete="off" id="inputVanity" />
+                        <br>
+                        <div class="helper-text" style="word-break: break-all"><em>Ex: henryscheindigital.com/25Colgate</em></div>
+                     </div>
+                  </div>
+                  <div class="flex-wrapper flex-2 dynamic-inputs no-wrap" style="">
+                     <div class="flex-column" style="display: none">
+                        <div id="mktoFolderwrapper">
+                           <div id="marketoFolderName" class="xtra-input"></div>
+                        </div>
+                     </div>
+                     <div class="flex-column" style="display: none">
+                        <div id="qrCodeWrapper">
+                           <div id="qrCodeContent" class="xtra-input"></div>
+                        </div>
+                        <div style="height:0px"></div>
+                     </div>
+                  </div>
+               </div>
+               <div class="right-flex">
+                  <div class="logo-wrap"> <img align="center" src="https://www.henryschein.com/us-en/images/logos/vendor/henryschein-logo.svg" alt="Henry Schein"/> </div>
+                  <div class="right-flex-inner"> 
+                     
+                     <!-- Filtering -->
+                     <div id="filter-checkboxes">
+                        <h2 class="filters">Filters</h2>
+                        <div id="category-checkboxes">
+                           <div id="group-checkboxes">
+                              <div class="dropdown-wrapper">
+                                 <div class="custom-dropdown">
+                                    <label class="customCheckboxLabel">
+                                       <input type="checkbox" name="group" value="PaidSearchAds" class="customCheckbox">
+                                    </label>
+                                    <p class="dropdown-parent">Paid Search Ads</p>
+                                    <span class="arrow dropdown-parent">&#9660;</span> </div>
+                                 <div class="customSubcategories" style="display: none;">
+                                    <label style="font-size: 14px;">
+                                       <input type="checkbox" name="group" value="PaidSearchAdsGoogle">
+                                       Google</label>
+                                    <label style="font-size: 14px;">
+                                       <input type="checkbox" name="group" value="PaidSearchAdsBing">
+                                       Bing</label>
+                                 </div>
+                              </div>
+                              <div style="height:0px"></div>
+                              <div class="dropdown-wrapper">
+                                 <div class="custom-dropdown">
+                                    <label class="customCheckboxLabel">
+                                       <input type="checkbox" name="group" value="Email" class="customCheckbox" id="emailCheckbox">
+                                    </label>
+                                    <p class="dropdown-parent">Email</p>
+                                    <span class="arrow dropdown-parent">▼</span> </div>
+                                 <div class="customSubcategories" style="">
+                                    <div class="dropdown-wrapper nested">
+                                       <div class="custom-dropdown">
+                                          <label class="customCheckboxLabel">
+                                             <input type="checkbox" name="group" value="EmailMarketoSCS" class="customCheckbox">
+                                          </label>
+                                          <p class="dropdown-parent font14">MarketoSCS</p>
+                                          <span class="arrow dropdown-parent font14">▼</span> </div>
+                                       <div class="customSubcategories" style="">
+                                          <div style="height:.25em"></div>
+                                          <label style="font-size: 14px;">
+                                             <input type="checkbox" name="group" value="MarketoSCSHenryScheinLogo" class="font14">
+                                             HS Logo</label>
+                                          <label style="font-size: 14px;">
+                                             <input type="checkbox" name="group" value="MarketoSCSShopButton"  class="font14">
+                                             Shop Button</label>
+                                          <label style="font-size: 14px;">
+                                             <input type="checkbox" name="group" value="MarketoSCSAccountButton">
+                                             Account Button</label>
+                                          <label style="font-size: 14px;">
+                                             <input type="checkbox" name="group" value="MarketoSCSHeroPartnerImage">
+                                             Hero Partner Image</label>
+                                          <label style="font-size: 14px;">
+                                             <input type="checkbox" name="group" value="MarketoSCSMainCTA">
+                                             Main CTA</label>
+                                          <label style="font-size: 14px;">
+                                             <input type="checkbox" name="group" value="MarketoSCSSupplies">
+                                             Supplies</label>
+                                          <label style="font-size: 14px;">
+                                             <input type="checkbox" name="group" value="MarketoSCSRepairSolutions">
+                                             Repair Solutions</label>
+                                          <label style="font-size: 14px;">
+                                             <input type="checkbox" name="group" value="MarketoSCSFeaturedOffers">
+                                             FeaturedOffers</label>
+                                          <label style="font-size: 14px;">
+                                             <input type="checkbox" name="group" value="MarketoSCSHelp">
+                                             Help</label>
+                                          <div style="height:.5em"></div>
+                                       </div>
+                                    </div>
+                                    <label style="font-size: 14px;">
+                                       <input type="checkbox" name="group" value="EmailMarketoMktg">
+                                       MarketoMktg</label>
+                                 </div>
+                              </div>
+                              <div style="height:0px"></div>
+                              <div class="dropdown-wrapper">
+                                 <div class="custom-dropdown">
+                                    <label class="customCheckboxLabel">
+                                       <input type="checkbox" name="group" value="EmailFeaturedBanner" class="customCheckbox" id="emailFeaturedBannerCheckbox">
+                                    </label>
+                                    <p class="dropdown-parent">Email Featured Banner</p>
+                                    <span class="arrow dropdown-parent">&#9660;</span> </div>
+                                 <div class="customSubcategories" style="display: none;">
+                                    <label style="font-size: 14px;">
+                                       <input type="checkbox" name="group" value="EmailFeaturedBannerMarketoSCSFeaturedBanner">
+                                       MarketoSCS</label>
+                                    <label style="font-size: 14px;">
+                                       <input type="checkbox" name="group" value="EmailFeaturedBannerMarketoMktgFeaturedBanner">
+                                       MarketoMktg</label>
+                                 </div>
+                              </div>
+                              <div style="height:0px"></div>
+                              <div class="dropdown-wrapper">
+                                 <div class="custom-dropdown">
+                                    <label class="customCheckboxLabel">
+                                       <input type="checkbox" name="group" value="PaidDisplayAds" class="customCheckbox" checked>
+                                    </label>
+                                    <p class="dropdown-parent">Paid Display Ads</p>
+                                    <span class="arrow dropdown-parent">&#9660;</span> </div>
+                                 <div class="customSubcategories" style="display: none;">
+                                    <label style="font-size: 14px;">
+                                       <input type="checkbox" name="group" value="PaidDisplayAdsAdRoll" checked>
+                                       AdRoll</label>
+                                    <label style="font-size: 14px;">
+                                       <input type="checkbox" name="group" value="PaidDisplayAdsAdAdvance" checked>
+                                       AdAdvance</label>
+                                    <label style="font-size: 14px;">
+                                       <input type="checkbox" name="group" value="PaidDisplayAdsRichRelevance" checked>
+                                       RichRelevance</label>
+                                 </div>
+                              </div>
+                              <div style="height:0px"></div>
+                              <div class="dropdown-wrapper">
+                                 <div class="custom-dropdown">
+                                    <label class="customCheckboxLabel">
+                                       <input type="checkbox" name="group" value="Narvar" class="customCheckbox">
+                                    </label>
+                                    <p class="dropdown-parent">Narvar</p>
+                                    <span class="arrow dropdown-parent">&#9660;</span> </div>
+                                 <div class="customSubcategories" style="display: none;">
+                                    <label style="font-size: 14px;">
+                                       <input type="checkbox" name="group" value="NarvarWebsite">
+                                       Website</label>
+                                    <label style="font-size: 14px;">
+                                       <input type="checkbox" name="group" value="NarvarEmail">
+                                       Email</label>
+                                 </div>
+                              </div>
+                              <div style="height:0px"></div>
+                              <div class="dropdown-wrapper">
+                                 <div class="custom-dropdown">
+                                    <label class="customCheckboxLabel">
+                                       <input type="checkbox" name="group" value="Social" class="customCheckbox" checked>
+                                    </label>
+                                    <p class="dropdown-parent">Social</p>
+                                    <span class="arrow dropdown-parent">&#9660;</span> </div>
+                                 <div class="customSubcategories" style="display: none;">
+                                    <label style="font-size: 14px;">
+                                       <input type="checkbox" name="group" value="SocialInstagram" checked>
+                                       Instagram</label>
+                                    <label style="font-size: 14px;">
+                                       <input type="checkbox" name="group" value="SocialTwitter" checked>
+                                       Twitter</label>
+                                    <label style="font-size: 14px;">
+                                       <input type="checkbox" name="group" value="SocialFacebook" checked>
+                                       Facebook</label>
+                                    <label style="font-size: 14px;">
+                                       <input type="checkbox" name="group" value="SocialYouTube" checked>
+                                       YouTube</label>
+                                    <label style="font-size: 14px;">
+                                       <input type="checkbox" name="group" value="SocialLinkedIn" checked>
+                                       LinkedIn</label>
+                                 </div>
+                              </div>
+                              <div style="height:0px"></div>
+                              <div class="no-dropdown">
+                                 <div class="weblink">
+                                    <label>
+                                       <input type="checkbox" name="group" value="WebsiteLinkingAgreement" id="websiteLinkingAgreementCheckbox" >
+                                       Website Linking Agreement</label>
+                                    <div id="webLinkContainer" class="xtra-input"></div>
+                                 </div>
+                              </div>
+                              <div style="height:0px"></div>
+                              <div class="no-dropdown">
+                                 <div class="tradepub">
+                                    <label>
+                                       <input type="checkbox" name="group" value="TradePublication" id="tradePublicationCheckbox">
+                                       Trade Publications </label>
+                                    <div id="tradePubContainer" class="xtra-input"></div>
+                                 </div>
+                              </div>
+                              <div style="height:0px"></div>
+                              <div class="no-dropdown">
+                                 <label>
+                                    <input type="checkbox" name="group" value="VanityURLs">
+                                    Vanity URLs</label>
+                              </div>
+                              <div style="height:0px"></div>
+                              <div class="dropdown-wrapper">
+                                 <div class="custom-dropdown">
+                                    <label class="customCheckboxLabel">
+                                       <input type="checkbox" name="group" value="QRCode" class="customCheckbox qrCodeCheckbox">
+                                    </label>
+                                    <p class="dropdown-parent">QR Code</p>
+                                    <span class="arrow dropdown-parent">&#9660;</span> </div>
+                                 <div class="customSubcategories" style="display: none;">
+                                    <label style="font-size: 14px;">
+                                       <input type="checkbox" name="group" value="QRCodeNxtBook" class="qrCodeCheckbox">
+                                       Nxtbook</label>
+                                    <label style="font-size: 14px;">
+                                       <input type="checkbox" name="group" value="QRCodeExternal" class="qrCodeCheckbox">
+                                       External</label>
+                                 </div>
+                              </div>
+                              <div style="height:0px"></div>
+                              <div class="no-dropdown">
+                                 <label>
+                                    <input type="checkbox" name="group" value="Telesales">
+                                    Telesales</label>
+                              </div>
+                              <div style="height:0px"></div>
+                           </div>
+                        </div>
+                     </div>
+                  </div>
+               </div>
+            </div>
+         </form>
+         
+         <!-- Copy All Button -->
+         <div class="url-list-log-wrapper" style="position: relative;">
+            <div class="absolute-div">
+               <p id="createdByTrevor" class="smaller">Created by <a href="mailto:Trevor.Smith@henryschein.com?subject=URL%20Generator&cc=Greg.Kowalczyk@henryschein.com" target="_blank">Trevor Smith</a></p>
+               <button id="copy-all-btn" class="hs-btn secondary-btn rounded small">Copy All</button>
+            </div>
+            <div id="url-list-log"> </div>
+         </div>
+      </div>
+   </div>
+</div>
+<div class="updates-bar">
+   <div class="updates-toggle" id="updates-toggle">
+      <svg xmlns="http://www.w3.org/2000/svg" height="20" viewBox="0 0 24 24" width="20" fill="#FFFFFF">
+         <path d="M12 2C10.34 2 9 3.34 9 5v1.07C6.27 6.56 4.5 8.79 4.5 11.5v4.79L3 18.79V20h18v-1.21l-1.5-2.5v-4.79c0-2.71-1.77-4.94-4.5-5.43V5c0-1.66-1.34-3-3-3zm0 18c-1.1 0-2-.9-2-2h4c0 1.1-.9 2-2 2zM8.12 17l.88-1.47h6l.88 1.47H8.12z"/>
+      </svg>
+   </div>
+   <div class="updates-content" id="updates-content">
+      <h3>Tool Updates</h3>
+      <ul>
+          <li>
+            <div class="comment"> <img src="http://us.design.eschein.com/us-en/COMPS_DoNotDelete/templates/img/tsmith-profile.jfif" alt="Trevor Smith" class="profile-pic">
+               <div class="comment-text"> <strong>Trevor Smith</strong> <span class="comment-date">2024-12-04</span>
+                  <p class="comment-message">Bug fixes with the email URL generation, specifically the "?" and "&" constructed improperly.</p>
+               </div>
+            </div>
+         </li>
+         <li>
+            <div class="comment"> <img src="http://us.design.eschein.com/us-en/COMPS_DoNotDelete/templates/img/tsmith-profile.jfif" alt="Trevor Smith" class="profile-pic">
+               <div class="comment-text"> <strong>Trevor Smith</strong> <span class="comment-date">2024-10-19</span>
+                  <p class="comment-message">Added error detection in the Page URL, Item Codes, Promo Code, and Job Number fields. The URLs will still be generated if errors are found, but a warning will display. </p>
+               </div>
+            </div>
+         </li>
+         <li>
+            <div class="comment"> <img src="http://us.design.eschein.com/us-en/COMPS_DoNotDelete/templates/img/tsmith-profile.jfif" alt="Trevor Smith" class="profile-pic">
+               <div class="comment-text"> <strong>Trevor Smith</strong> <span class="comment-date">2024-10-16</span>
+                  <p class="comment-message">Updates to UI and parsing functionality. utm_campaign is now able to be reverse-parsed. </p>
+               </div>
+            </div>
+         </li>
+         <li>
+            <div class="comment"> <img src="http://us.design.eschein.com/us-en/COMPS_DoNotDelete/templates/img/tsmith-profile.jfif" alt="Trevor Smith" class="profile-pic">
+               <div class="comment-text"> <strong>Trevor Smith</strong> <span class="comment-date">2024-10-15</span>
+                  <p class="comment-message">Added new responsive layout for tools. Added ability to parse already-tagged URLs (currently, only productid, promocode, cdivid, and dp parameters are supported)</p>
+               </div>
+            </div>
+         </li>
+         <li>
+            <div class="comment"> <img src="http://us.design.eschein.com/us-en/COMPS_DoNotDelete/templates/img/tsmith-profile.jfif" alt="Trevor Smith" class="profile-pic">
+               <div class="comment-text"> <strong>Trevor Smith</strong> <span class="comment-date">2024-09-30</span>
+                  <p class="comment-message">Fixed bugs in the form validation logic</p>
+               </div>
+            </div>
+         </li>
+      </ul>
+   </div>
+</div>
+   <script src="assets/js/url-generator.js" type="text/javascript"></script>
+</body>
+</html>
